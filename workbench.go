@@ -15,7 +15,6 @@ import (
 
 //go:embed vscode-web.zip
 var vscodeZip []byte
-
 var vscodeReader *zip.Reader
 
 func init() {
@@ -31,7 +30,6 @@ type Workbench struct {
 }
 
 func (wb *Workbench) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fsys := workingpathfs.New(zipfs.New(vscodeReader), "dist")
 	mux := http.NewServeMux()
 	mux.Handle("/workbench.json", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("content-type", "application/json")
@@ -41,6 +39,7 @@ func (wb *Workbench) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}))
+	fsys := workingpathfs.New(zipfs.New(vscodeReader), "dist")
 	mux.Handle("/", http.FileServerFS(fsys))
 	mux.ServeHTTP(w, r)
 }
