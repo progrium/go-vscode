@@ -1,0 +1,28 @@
+{
+  "name": "go-vscode",
+  "displayName": "go-vscode",
+  "publisher": "progrium",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.66.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onFileSystem:hostfs"
+  ],
+  "browser": "./dist/web/extension.js",
+  "scripts": {
+    "compile-web": "npm run check-types && node esbuild.js",
+    "watch-web": "node esbuild.js --watch",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0",
+    "@vscode/test-web": "^0.0.54",
+    "esbuild": "^0.21.5",
+    "typescript": "^5.4.5"
+  }
+}

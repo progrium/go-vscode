@@ -51,7 +51,7 @@ type ExtensionVirtualWorkspaceSupport struct {
 	Override *bool `json:"override,omitempty"`
 }
 
-type ProductConfiguration struct {
+type Configuration struct {
 	Version                               string               `json:"version,omitempty"`
 	Date                                  *string              `json:"date,omitempty"`
 	Quality                               *string              `json:"quality,omitempty"`

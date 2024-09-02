@@ -1,28 +1,32 @@
 package main
 
 import (
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"os/exec"
 
+	"github.com/creack/pty"
 	"github.com/progrium/go-vscode"
 	"github.com/progrium/go-vscode/product"
+	"tractor.dev/toolkit-go/engine/fs/osfs"
+	"tractor.dev/toolkit-go/engine/fs/workingpathfs"
 )
 
 func main() {
-	// fsys := os.DirFS(".")
-
-	// cmd := exec.Command("/bin/sh")
-	// tty, err := pty.Start(cmd)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	cwd, _ := os.Getwd()
+	fsys := workingpathfs.New(osfs.New(), cwd)
 
 	wb := &vscode.Workbench{
-		ProductConfiguration: product.ProductConfiguration{
-			NameShort: "CustomEditor",
-			NameLong:  "My Custom Editor",
-			Version:   "example",
+		ProductConfiguration: product.Configuration{
+			NameLong: "My Custom Editor",
 		},
+		MakePTY: func() (io.ReadWriteCloser, error) {
+			cmd := exec.Command("/bin/bash")
+			return pty.Start(cmd)
+		},
+		FS: fsys,
 	}
 
 	log.Println("serving on :8080 ...")

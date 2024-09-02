@@ -2,27 +2,25 @@
 
 VSCode as a Go library. Embed an editor in your Go programs.
 
+Set up `vscode.Workbench` with a terminal factory and filesystem (both of which can be virtual), then you can serve it as an HTTP handler to access your custom VSCode editor in the browser. Use with a webview window library to give the editor its own native window.
+
 ```go
-package main
-
-import (
-	"log"
-	"net/http"
-
-	"github.com/progrium/go-vscode"
-	"github.com/progrium/go-vscode/product"
-)
-
 func main() {
+	cwd, _ := os.Getwd()
+	fsys := workingpathfs.New(osfs.New(), cwd)
+
 	wb := &vscode.Workbench{
-		ProductConfiguration: product.ProductConfiguration{
-			NameShort: "CustomEditor",
-			NameLong:  "My Custom Editor",
-			Version:   "example",
+		ProductConfiguration: product.Configuration{
+			NameLong: "My Custom Editor",
 		},
+		MakePTY: func() (io.ReadWriteCloser, error) {
+			cmd := exec.Command("/bin/bash")
+			return pty.Start(cmd)
+		},
+		FS: fsys,
 	}
 
-	log.Println("serving on :8080 ...")
+	log.Println("editor serving on :8080 ...")
 	if err := http.ListenAndServe(":8080", wb); err != nil {
 		log.Fatal(err)
 	}
@@ -30,10 +28,6 @@ func main() {
 }
 
 ```
-
-Although in the current state, this will give you VSCode on localhost:8080, but you
-won't be able to edit files. I need to expose the filesystem and terminal that VSCode
-uses, though they'll both be based on Go interfaces so they could be virtual.
 
 Let me know what else you'd like to customize from Go!
 
