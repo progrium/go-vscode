@@ -35,7 +35,7 @@ Let me know what else you'd like to customize from Go!
 
 This Go module embeds a 17MB release artifact of [vscode-web](https://github.com/progrium/vscode-web) stored with Git LFS, which [doesn't quite work](https://github.com/golang/go/issues/47308) with `go get` seamlessly yet. 
 
-**To use this library, you must have [Git LFS](https://git-lfs.com/) installed and have `git lfs install` run, but you must also set `export GOPRIVATE=github.com/progrium/go-vscode` as a workaround before running `go mod tidy` or `go get`. Otherwise your built project will panic with `panic: zip: not a valid zip file`.**
+**To use this library,** you must have [Git LFS](https://git-lfs.com/) installed and have `git lfs install` run, but you must also set `export GOPRIVATE=github.com/progrium/go-vscode` as a workaround before running `go mod tidy` or `go get`. Otherwise your built project will panic with `panic: zip: not a valid zip file`.
 
 ## License
 
