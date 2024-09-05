@@ -67,8 +67,12 @@ func (wb *Workbench) ensureExtension(r *http.Request) {
 		}
 	}
 	if !foundExtension {
+		scheme := "http"
+		if r.TLS != nil {
+			scheme = "https"
+		}
 		wb.AdditionalBuiltinExtensions = append(wb.AdditionalBuiltinExtensions, URIComponents{
-			Scheme:    "http",
+			Scheme:    scheme,
 			Authority: r.Host,
 			Path:      "/extension",
 		})
